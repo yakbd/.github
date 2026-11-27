@@ -1,15 +1,17 @@
 # Contributing to YAKBD
 
-Thank you for helping. Questions, bug reports and pull requests are all welcome in every YAKBD repository. Both
-projects are previews: the format and the tool may still change between versions.
+Thank you for helping. Questions, bug reports and pull requests are all welcome in every YAKBD repository. All
+projects are previews: the format, the tool and the editor may still change between versions.
 
 | repository | what it holds |
 |---|---|
 | [`yakbd/kbl-spec`](https://github.com/yakbd/kbl-spec) | the `.kbl.json` format: specification, JSON Schema, checker |
 | [`yakbd/yakbd-cli`](https://github.com/yakbd/yakbd-cli) | the `yakbd` tool: converts layouts and builds Windows layout DLLs and installers |
+| [`yakbd/yakbd-gui`](https://github.com/yakbd/yakbd-gui) | the YAKBD Editor: a desktop editor for `.kbl.json` files (Qt 6, Windows, macOS, Linux) |
 
 Questions about what a field means or what the schema accepts go to `yakbd/kbl-spec`; questions about converting,
-building or installing a layout go to `yakbd/yakbd-cli`. Each repository's issue templates ask for what is needed.
+building or installing a layout go to `yakbd/yakbd-cli`; questions about the editor's window, views and forms go
+to `yakbd/yakbd-gui`. Each repository's issue templates ask for what is needed.
 
 ## How to propose a change
 
@@ -105,3 +107,26 @@ Please attach:
 The report contains file names and the layout's own text. The log also names Windows accounts by their security
 id (SID) and the user folders it worked in. Look through both before you attach them, and remove what you do not
 want to share.
+
+## `yakbd/yakbd-gui`: the editor
+
+The editor edits `.kbl.json` files and runs the `yakbd` tool for checking, converting and building, so a wrong
+report, conversion or build is usually a `yakbd/yakbd-cli` bug; a problem with the window, the keyboard view, the
+forms, saving or undo belongs here.
+
+Build and test as the repository's [README](https://github.com/yakbd/yakbd-gui#build) says for your platform: Qt is
+downloaded at the pinned version by `tools/getqt.cmake`, then `cmake`, `cmake --build` and
+`ctest --test-dir build --output-on-failure` (the tests need the released `yakbd` CLI). What has been checked
+where is in its `VERIFIED.md`.
+
+### Reporting an editor bug
+
+Please attach:
+
+1. **Your system**: the operating system and its version (for example Windows 11 24H2, macOS 15.2, Ubuntu 24.04),
+   and on Linux the desktop and session (for example GNOME on Wayland, KDE Plasma on X11).
+2. **The editor and its style**: the editor's version (from its About box, or the release you downloaded) and the style it runs with (FluentWinUI3,
+   macOS or Fusion, or what `QT_QUICK_CONTROLS_STYLE` names), and whether the app was in light or dark appearance.
+3. **A screenshot** of the problem.
+4. **What you did and what happened**: the steps, and the layout file if it matters (or the smallest one that still
+   shows the problem).
