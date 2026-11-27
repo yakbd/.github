@@ -1,0 +1,107 @@
+# Contributing to YAKBD
+
+Thank you for helping. Questions, bug reports and pull requests are all welcome in every YAKBD repository. Both
+projects are previews: the format and the tool may still change between versions.
+
+| repository | what it holds |
+|---|---|
+| [`yakbd/kbl-spec`](https://github.com/yakbd/kbl-spec) | the `.kbl.json` format: specification, JSON Schema, checker |
+| [`yakbd/yakbd-cli`](https://github.com/yakbd/yakbd-cli) | the `yakbd` tool: converts layouts and builds Windows layout DLLs and installers |
+
+Questions about what a field means or what the schema accepts go to `yakbd/kbl-spec`; questions about converting,
+building or installing a layout go to `yakbd/yakbd-cli`. Each repository's issue templates ask for what is needed.
+
+## How to propose a change
+
+1. For anything larger than a typo, open an issue first and say what you want to change and why. A change to the
+   format is a design decision and is discussed before it is written.
+2. Fork the repository, make the change on a branch, and run the checks of that repository (below).
+3. Open a pull request that says what changed, why, and how you checked it. Link the issue.
+4. Each repository has an `AGENTS.md` with its rules for changing it, for people and coding agents alike. Read it
+   before a larger change.
+
+Contributions are licensed under MIT-0, the licence of every YAKBD repository (`LICENSE` in each). Third-party
+material keeps its own licence and needs an entry in that repository's `NOTICE`. Describe CLDR in your own words
+and link to it rather than copying its text.
+
+## Clean room
+
+YAKBD is written clean-room, and every contribution must keep it so. By opening a pull request you state that, for
+what you contribute, you did **not** use:
+
+- Microsoft source code, including leaked source, or the headers and samples of the Windows SDK or WDK;
+- decompiled or disassembled code of any program, including Windows and MSKLC;
+- leaked or confidential material of any kind;
+- source code of Wine or ReactOS.
+
+Every fact about Windows (layout DLLs, Windows behaviour, installation, `.klc` files) needs a **public source** you
+cite (a public Microsoft documentation page, for example) or a **measurement**: a test on a Windows machine that you
+describe well enough for someone else to repeat it. A fact you only remember is not enough; open an issue instead.
+How each repository was written, and from which sources, is recorded in its `CLEAN-ROOM.md`.
+
+## `yakbd/kbl-spec`: the format
+
+- **Spec question**: something in `SPEC.md` or a target document is unclear, missing or contradicts itself.
+- **Schema bug**: `schema/0.1/kbl.schema.json` accepts a file the specification forbids, or rejects one it allows.
+  `SPEC.md` wins over the schema, so such a difference is fixed in the schema.
+
+Checks, on Node.js 22, from the repository root:
+
+    npm ci                           # exact pins from package-lock.json
+    npm test                         # tsc + schema freshness + checker; this is what CI runs
+
+- Edit the schema source `src/schema.ts`, never the generated schema, and run `npm run gen`.
+- A design decision becomes the next numbered entry of `DECISIONS.md`, with its reason; entries are never
+  renumbered. A question for the maintainers goes to `OPEN-QUESTIONS.md`, with a recommendation.
+- A change to the format's shape gets a line in the changelog of `STATUS.md`. What may change in 0.x, and how, is
+  in [`COMPATIBILITY.md`](https://github.com/yakbd/kbl-spec/blob/main/COMPATIBILITY.md).
+
+## `yakbd/yakbd-cli`: the tool
+
+- **Layout bug**: a layout converts, builds, installs or types differently from what you expected (what to attach
+  is below).
+- **Tool bug**: a command crashes, hangs, rejects a valid file or writes a wrong one.
+- **Question or idea**: anything else about the tool.
+
+Checks, with Go 1.26 or later and nothing else (the tool uses the standard library only), from the repository root:
+
+    gofmt -l .                       # must print nothing
+    go vet ./...
+    go test ./...                    # about 10 s; this is what CI runs
+    go build -o /dev/null ./cmd/yakbd
+
+Fuzz targets exist for every reader of outside input. CI runs only their seed inputs as part of `go test`; the
+fuzzer runs locally, one target at a time, for example:
+
+    go test -run='^$' -fuzz='^FuzzParse$' -fuzztime=10m -timeout 0 ./format/klc
+
+The targets, their checks and how to keep a finding as a test are in
+[`docs/fuzzing.md`](https://github.com/yakbd/yakbd-cli/blob/main/docs/fuzzing.md).
+
+- Standard library only; no Python anywhere (checks are Go tests or Go commands under `tools/`).
+- When you change a package the installer program uses, rebuild `installer/stub-386.exe` with
+  `go run ./tools/buildstub` and commit it with the change.
+- An intended change of test output is regenerated with `-update`, and the diff reviewed.
+- Windows behaviour is tested in disposable Windows virtual machines with the bundles under `tools/`. A change that
+  needs such a test says so in the pull request; a maintainer runs it.
+
+### Reporting a layout bug
+
+Please attach:
+
+1. **The layout file**: the `.klc`, `.kbl.json` or CLDR `.xml` file, or the smallest file that still shows the
+   problem. For a problem with a DLL you converted, the DLL, if you may share it.
+2. **The report as JSON**: run the command again with `-report report.json`, for example
+   `yakbd installer -report report.json my-layout.klc`, and attach `report.json`.
+3. **The installer log**, for a problem when installing or uninstalling: `%TEMP%\yakbd-<dll name>-setup.log` on
+   the Windows PC (paste `%TEMP%` into File Explorer's address bar), or the file you named with `/l*v log.txt`.
+   An installer run as administrator from another account writes it into that account's `%TEMP%`.
+4. **Windows version, build and architecture**: in Settings → System → About, the "Edition", "Version", "OS build"
+   and "System type" lines (for example Windows 11 Pro, 25H2, 26200.8037, 64-bit x64 or ARM64), and the yakbd
+   version (`yakbd version`).
+5. **What you typed and what you got**: the keys (with Shift, AltGr, Caps Lock, dead keys) and the characters
+   you expected and saw, and in which app.
+
+The report contains file names and the layout's own text. The log also names Windows accounts by their security
+id (SID) and the user folders it worked in. Look through both before you attach them, and remove what you do not
+want to share.
