@@ -47,6 +47,16 @@ cite (a public Microsoft documentation page, for example) or a **measurement**: 
 describe well enough for someone else to repeat it. A fact you only remember is not enough; open an issue instead.
 How each repository was written, and from which sources, is recorded in its `CLEAN-ROOM.md`.
 
+For **macOS, Linux and every later platform other than Windows** the rule is different; the Windows rule above is
+unchanged:
+
+- **any public source may be read**: documentation, specifications, public repositories and source code of any
+  licence (GPL included), public mirrors of headers, and reference tools for their behaviour;
+- **nothing is copied**: no code and no long prose; write code and text from your own understanding. Short names
+  and values a format requires (element names, keysym names, key codes) are facts and may be used;
+- **every source you read is recorded** in the repository's `CLEAN-ROOM.md`: its URL (with a version, tag or commit
+  where there is one), what you read it for, and its licence.
+
 ## `yakbd/kbl-spec`: the format
 
 - **Spec question**: something in `SPEC.md` or a target document is unclear, missing or contradicts itself.
