@@ -3,8 +3,8 @@
 Thank you for helping. YAKBD is an open-source keyboard layout designer. People design a keyboard layout once, in an
 open file format, and YAKBD turns it into native, installable layouts for each operating system and keyboard tool,
 and converts existing layouts from their formats. Its aim is that a custom or minority-language layout can be made,
-shared and kept up to date by anyone, on every platform, without depending on a single vendor's tool. Windows is
-supported today; the official formats of other operating systems come next, then third-party formats such as Keyman.
+shared and kept up to date by anyone, on every platform, without depending on a single vendor's tool. Which platforms
+are supported today, and the documentation of every part, is on the website: https://yakbd.github.io/.
 
 Questions, bug reports and pull requests are all welcome in every YAKBD repository. All projects are previews: the
 format, the tool and the editor may still change between versions.
@@ -12,7 +12,7 @@ format, the tool and the editor may still change between versions.
 | repository | what it holds |
 |---|---|
 | [`yakbd/kbl-spec`](https://github.com/yakbd/kbl-spec) | the `.kbl.json` format: specification, JSON Schema, checker |
-| [`yakbd/yakbd-cli`](https://github.com/yakbd/yakbd-cli) | the `yakbd` tool: converts layouts and builds them (today Windows layout DLLs and installers) |
+| [`yakbd/yakbd-cli`](https://github.com/yakbd/yakbd-cli) | the `yakbd` tool: converts layouts and builds them into installable layouts for each platform |
 | [`yakbd/yakbd-gui`](https://github.com/yakbd/yakbd-gui) | the YAKBD Editor: a desktop editor for `.kbl.json` files (Qt 6, Windows, macOS, Linux) |
 
 Questions about what a field means or what the schema accepts go to `yakbd/kbl-spec`; questions about converting,
