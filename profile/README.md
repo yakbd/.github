@@ -22,8 +22,7 @@ and YAKBD builds it into native, installable layouts and converts existing layou
 
 | platform | state |
 |---|---|
-| Windows | today |
-| macOS, Linux | in the next release |
+| Windows, macOS, Linux | today |
 | Android, iOS, ChromeOS, Keyman | planned |
 
 | repository | what it is |
@@ -33,4 +32,4 @@ and YAKBD builds it into native, installable layouts and converts existing layou
 | [`kbl-spec`](https://github.com/yakbd/kbl-spec) | the `.kbl.json` format, its JSON Schema and checker |
 | [`yakbd.github.io`](https://github.com/yakbd/yakbd.github.io) | the website |
 
-A preview, MIT-0. [Contributing](https://github.com/yakbd/.github/blob/main/CONTRIBUTING.md).
+A preview, MIT-0. [Contributing](https://yakbd.github.io/contributing).
